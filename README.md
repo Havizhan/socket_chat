@@ -30,27 +30,38 @@ socket-server-client/
 ### 1. Persiapan
 - Pastikan sudah menginstal **Python 3.x**  
 - Clone / download repo ini, lalu buka folder `src`
+- Pastikan kedua device berada di jaringan yang sama (WiFi/LAN yang sama)
 
-### 2. Jalankan Server
-Buka terminal 1, lalu ketik:
+### 2. Jalankan Server (Device 1)
+Buka terminal di komputer pertama, lalu ketik:
 ```bash
 python server.py
 ```
 
 **Output yang diharapkan:**
 ```
-Server berjalan di 0.0.0.0:12345
+=== Socket Chat Server ===
+🚀 Server berjalan di 0.0.0.0:12345
+📱 Client dapat terhubung menggunakan IP ini:
+   - Untuk device yang sama: 127.0.0.1
+   - Untuk device lain di jaringan: [IP komputer ini]
+💡 Tekan Ctrl+C untuk menghentikan server
 ```
 
-### 3. Jalankan Client
-Buka terminal lain (atau komputer lain), lalu jalankan:
+### 3. Jalankan Client (Device 2)
+Buka terminal di komputer kedua, lalu jalankan:
 ```bash
 python client.py
 ```
 
+**Saat diminta IP server, masukkan:**
+- `127.0.0.1` (jika testing di komputer yang sama)
+- `10.50.139.38` (ganti dengan IP komputer server - lihat output server)
+
 **Jika berhasil, akan muncul:**
 ```
-Terhubung ke server
+✅ Terhubung ke server!
+💡 Ketik 'bye' untuk keluar
 ```
 
 ### 4. Mulai Chat

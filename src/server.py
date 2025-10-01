@@ -14,7 +14,8 @@ def handle_client(client_socket, addr):
             if not msg:
                 break
             print(f"Message from {addr}: {msg.decode()}")
-            # kirim balik ke semua client lain
+
+            # kirim ke semua client lain
             for c in clients:
                 if c != client_socket:
                     c.send(msg)
@@ -29,13 +30,28 @@ def main():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))
     server.listen()
-    print(f"Server berjalan di {HOST}:{PORT}")
+    
+    print("=== Socket Chat Server ===")
+    print(f"🚀 Server berjalan di {HOST}:{PORT}")
+    print("📱 Client dapat terhubung menggunakan IP ini:")
+    print("   - Untuk device yang sama: 127.0.0.1")
+    print("   - Untuk device lain di jaringan: [IP komputer ini]")
+    print("💡 Tekan Ctrl+C untuk menghentikan server\n")
 
     while True:
-        client_sock, addr = server.accept()
-        clients.append(client_sock)
-        thread = threading.Thread(target=handle_client, args=(client_sock, addr))
-        thread.start()
+        try:
+            client_sock, addr = server.accept()
+            clients.append(client_sock)
+            thread = threading.Thread(target=handle_client, args=(client_sock, addr))
+            thread.start()
+        except KeyboardInterrupt:
+            print("\n🛑 Server dihentikan oleh user")
+            break
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            break
+    
+    server.close()
 
 if __name__ == "__main__":
     main()
