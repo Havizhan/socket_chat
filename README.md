@@ -73,37 +73,17 @@ python client.py
 
 ## 💡 Catatan
 
-- Jika server & client dijalankan di komputer yang sama, gunakan `127.0.0.1`
-- Jika di komputer berbeda (2 orang), gunakan IP address komputer server
+- Jika server & client dijalankan di komputer yang sama, gunakan `SERVER_HOST = '127.0.0.1'`
+- Jika di komputer berbeda (2 orang), ganti `SERVER_HOST` di `client.py` dengan alamat IP komputer server
 - Cek IP server dengan `ipconfig` (Windows) atau `ifconfig` (Linux/Mac)
-- Pastikan kedua device berada di jaringan yang sama (WiFi/LAN yang sama)
 
-## 🔧 Troubleshooting
+**Contoh:**
+```python
+SERVER_HOST = '192.168.1.10'
+SERVER_PORT = 12345
+```
 
-### Jika Tidak Bisa Terhubung:
-
-1. **Test Koneksi:**
-   ```bash
-   python test_connection.py
-   ```
-
-2. **Cek Firewall:**
-   ```bash
-   python firewall_helper.py
-   ```
-
-3. **Pastikan Server Berjalan:**
-   - Server harus dijalankan terlebih dahulu
-   - Cek apakah port 12345 terbuka
-
-4. **Cek IP Address:**
-   - Pastikan IP address benar
-   - Kedua device harus di jaringan yang sama
-
-### Error Umum:
-- **`[WinError 10060]`** → Server tidak berjalan atau IP salah
-- **`Connection refused`** → Firewall memblokir atau server mati
-- **`No route to host`** → Device tidak dalam jaringan yang sama
+- Pastikan firewall tidak memblokir Python
 
 ---
 

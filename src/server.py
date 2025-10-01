@@ -28,52 +28,30 @@ def handle_client(client_socket, addr):
 
 def main():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Reuse address
-    server.settimeout(1.0)  # Timeout untuk accept
+    server.bind((HOST, PORT))
+    server.listen()
     
-    try:
-        server.bind((HOST, PORT))
-        server.listen(5)  # Max 5 pending connections
-        
-        print("=== Socket Chat Server ===")
-        print(f"🚀 Server berjalan di {HOST}:{PORT}")
-        print("📱 Client dapat terhubung menggunakan IP ini:")
-        print("   - Untuk device yang sama: 127.0.0.1")
-        print("   - Untuk device lain di jaringan: [IP komputer ini]")
-        print("💡 Tekan Ctrl+C untuk menghentikan server\n")
+    print("=== Socket Chat Server ===")
+    print(f"🚀 Server berjalan di {HOST}:{PORT}")
+    print("📱 Client dapat terhubung menggunakan IP ini:")
+    print("   - Untuk device yang sama: 127.0.0.1")
+    print("   - Untuk device lain di jaringan: [IP komputer ini]")
+    print("💡 Tekan Ctrl+C untuk menghentikan server\n")
 
-        while True:
-            try:
-                client_sock, addr = server.accept()
-                print(f"🔗 Koneksi baru dari {addr}")
-                clients.append(client_sock)
-                thread = threading.Thread(target=handle_client, args=(client_sock, addr))
-                thread.daemon = True
-                thread.start()
-            except socket.timeout:
-                continue  # Timeout normal, lanjut loop
-            except KeyboardInterrupt:
-                print("\n🛑 Server dihentikan oleh user")
-                break
-            except Exception as e:
-                print(f"❌ Error: {e}")
-                break
-                
-    except OSError as e:
-        if e.errno == 10048:  # Address already in use
-            print(f"❌ Port {PORT} sudah digunakan!")
-            print("💡 Coba ganti port atau matikan program yang menggunakan port tersebut")
-        else:
-            print(f"❌ Error binding: {e}")
-    finally:
-        # Cleanup semua client
-        for client in clients:
-            try:
-                client.close()
-            except:
-                pass
-        server.close()
-        print("🔌 Server ditutup")
+    while True:
+        try:
+            client_sock, addr = server.accept()
+            clients.append(client_sock)
+            thread = threading.Thread(target=handle_client, args=(client_sock, addr))
+            thread.start()
+        except KeyboardInterrupt:
+            print("\n🛑 Server dihentikan oleh user")
+            break
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            break
+    
+    server.close()
 
 if __name__ == "__main__":
     main()

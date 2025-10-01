@@ -26,13 +26,10 @@ def receive_messages(sock):
             break
 
 def main():
-    client = None
     try:
         print(f"\nMencoba terhubung ke {SERVER_HOST}:{SERVER_PORT}...")
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.settimeout(10)  # Timeout 10 detik untuk koneksi
         client.connect((SERVER_HOST, SERVER_PORT))
-        client.settimeout(None)  # Reset timeout setelah koneksi berhasil
         print("✅ Terhubung ke server!")
         print("💡 Ketik 'bye' untuk keluar\n")
 
@@ -43,39 +40,22 @@ def main():
 
         # kirim pesan
         while True:
-            try:
-                pesan = input("Pesan Anda: ")
-                if pesan.lower() == 'bye':
-                    print("👋 Keluar dari chat...")
-                    break
-                client.send(pesan.encode())
-            except KeyboardInterrupt:
-                print("\n👋 Keluar dari chat...")
+            pesan = input("Pesan Anda: ")
+            if pesan.lower() == 'bye':
+                print("👋 Keluar dari chat...")
                 break
+            client.send(pesan.encode())
 
-    except socket.timeout:
-        print(f"❌ Timeout! Tidak bisa terhubung ke {SERVER_HOST}:{SERVER_PORT}")
-        print("💡 Pastikan:")
-        print("   - Server sudah berjalan")
-        print("   - IP address benar")
-        print("   - Kedua device di jaringan yang sama")
     except ConnectionRefusedError:
-        print(f"❌ Koneksi ditolak! Server di {SERVER_HOST}:{SERVER_PORT} tidak berjalan")
-        print("💡 Pastikan server sudah dijalankan terlebih dahulu")
-    except OSError as e:
-        if e.errno == 10060:
-            print(f"❌ Timeout! Tidak bisa terhubung ke {SERVER_HOST}:{SERVER_PORT}")
-            print("💡 Cek koneksi jaringan dan pastikan server berjalan")
-        else:
-            print(f"❌ Error koneksi: {e}")
+        print(f"❌ Tidak bisa terhubung ke {SERVER_HOST}:{SERVER_PORT}")
+        print("Pastikan server sudah berjalan dan IP address benar!")
     except Exception as e:
         print(f"❌ Error: {e}")
     finally:
-        if client:
-            try:
-                client.close()
-            except:
-                pass
+        try:
+            client.close()
+        except:
+            pass
 
 if __name__ == "__main__":
     main()
